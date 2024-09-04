@@ -2,6 +2,7 @@ package com.wg.service;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.wg.dao.BookingDAO;
@@ -17,14 +18,6 @@ public class BookingService {
 	}
 	
 	VehicleDAO vehicleDAO = new VehicleDAO();
-
-//	public void bookAVehicle(Booking newBooking) throws SQLException {
-//		List<Booking> existingBooking = bookingDAO.getById(newBooking.getBookingId());
-//		if(existingBooking == null) {
-//			throw new IllegalArgumentException("Booking already exist.");
-//		}
-//		bookingDAO.add(newBooking);
-//	}
 	
 	public void bookVehicle(Booking booking) throws SQLException {
 		List<Booking> existingBooking = bookingDAO.getById(booking.getBookingId());
@@ -45,5 +38,15 @@ public class BookingService {
 	public void cancelBooking(String bookingId, String vehicleId) throws SQLException {
         bookingDAO.cancelBooking(bookingId);
 		vehicleDAO.updateStatusQuery(vehicleId, AvailabilityStatus.AVAILABLE);
+    }
+	
+	public void returnVehicle(String bookingId) {
+        Timestamp returnTime = Timestamp.valueOf(LocalDateTime.now());
+        try {
+            bookingDAO.returnVehicle(bookingId, returnTime);
+            System.out.println("Vehicle returned successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while returning vehicle: " + e.getMessage());
+        }
     }
 }

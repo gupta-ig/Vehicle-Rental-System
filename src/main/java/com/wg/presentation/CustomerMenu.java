@@ -35,62 +35,66 @@ public class CustomerMenu {
 
 		while(true) {
 			System.out.println(StringConstants.CUSTOMER_MENU);
-	        System.out.print("Enter your choice: ");
+	        System.out.print(StringConstants.ENTER_YOUR_CHOICE);
 	        
 	        choice = App.scanner.nextInt();
 	        App.scanner.nextLine();
 	        
 	        switch(choice) {
 	        case 1:
-	        	System.out.println("Booking a Vehicle");
+	        	System.out.println(StringConstants.START_BOOKING_A_VEHICLE);
 	        	bookingController.makeBooking(App.scanner, user.getUserId());
 	        	break;
 	        case 2:
-	        	System.out.println("View booking history");
+	        	System.out.println(StringConstants.RETURNING_A_VEHICLE);
+	        	bookingController.returnVehicle(user.getUserId());
+	        	return;
+	        case 3:
+	        	System.out.println(StringConstants.YOUR_BOOKING_HISTORY);
 	        	bookingController.viewHistory(user.getUserId());
 	        	break;
-	        case 3:
-	        	System.out.println("Give a review");
+	        case 4:
+	        	System.out.println(StringConstants.GIVE_A_REVIEW);
 	        	reviewController.addReview(user);
 	        	break;
-	        case 4:
-	        	System.out.println("See all reviews");
+	        case 5:
+	        	System.out.println(StringConstants.SEE_ALL_REVIEWS);
 	        	reviewController.getReviewById(user.getUserId());
 	        	break;
-	        case 5:
-	        	System.out.println("Raising a complaint");
+	        case 6:
+	        	System.out.println(StringConstants.RAISING_A_COMPLAINT);
 	        	complaintController.raiseComplaint(user);
 	        	break;
-	        case 6:
-	        	System.out.println("View all complaints");
+	        case 7:
+	        	System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
 	        	complaintController.viewComplaintById(user.getUserId());
 	        	break;
-	        case 7:
-	        	System.out.println("Cancel Booking");
+	        case 8:
+	        	System.out.println(StringConstants.CANCEL_BOOKING);
 	        	bookingController.cancelBooking(user.getUserId());
 	        	break;
-	        case 8:
-	        	System.out.println("Logging out...");
+	        case 9:
+	        	System.out.println(StringConstants.LOGGING_OUT);
 	        	
 	        	while(true) {
-	        		System.out.print("Do you want to continue? (Y/N): ");
+	        		System.out.print(StringConstants.DO_YOU_WANT_TO_CONTINUE);
 		        	
 			        String continueChoice = App.scanner.next();
 			        if(continueChoice.equalsIgnoreCase("y")) {
 			        	continue;
 			        }
 			        else if(continueChoice.equalsIgnoreCase("n")) {
-			        	System.out.println("Thank you for visiting...");
+			        	System.out.println(StringConstants.THANK_YOU_FOR_VISITING);
 			        	System.exit(0);
 			        	break;
 			        }
 			        else {
-			        	System.out.println("Please enter valid input.");
+			        	System.out.println(StringConstants.PLEASE_ENTER_VALID_INPUT);
 			        }
 	        	}
 	        	break;
 	        default:
-	        	System.out.println("Invalid choice. Please enter valid choice.");
+	        	System.out.println(StringConstants.INVALID_CHOICE_PLEASE_ENTER_VALID_CHOICE);
 	        }
 		}
     }

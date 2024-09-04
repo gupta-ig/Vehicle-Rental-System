@@ -6,6 +6,7 @@ import com.wg.app.App;
 import com.wg.controller.LoginController;
 import com.wg.controller.UserController;
 import com.wg.dao.UserDAO;
+import com.wg.helper.Choice;
 import com.wg.helper.InputSanitizer;
 import com.wg.helper.PasswordUtil;
 import com.wg.helper.StringConstants;
@@ -13,17 +14,15 @@ import com.wg.model.User;
 import com.wg.service.UserRegisterService;
 
 public class MenuRunner {
-
 	private static UserDAO userDAO = new UserDAO();
 	private static UserRegisterService userRegisterService = new UserRegisterService(userDAO);
 	
 	public static void displayStarterMenu() throws SQLException {
 		while (true) {
 			System.out.println(StringConstants.STARTER_MENU);
-			System.out.print("Enter Your Choice: ");
+			System.out.print(StringConstants.ENTER_YOUR_CHOICE);
 
-			int choice = App.scanner.nextInt();
-			App.scanner.nextLine(); // Consume newline
+			int choice = Choice.enterChoice();
 
 			switch (choice) {
 			case 1:
@@ -35,17 +34,17 @@ public class MenuRunner {
 				break;
 
 			case 3:
-				System.out.println("Thank you for visiting!");
+				System.out.println(StringConstants.THANK_YOU_FOR_VISITING);
 				return;
 
 			default:
-				System.out.println("Invalid choice. Please try again.");
+				System.out.println(StringConstants.INVALID_CHOICE_PLEASE_ENTER_VALID_CHOICE);
 			}
 		}
 	}
 
 	public static void handleLogin() {
-		System.out.print("Enter User Email: ");
+		System.out.print(StringConstants.ENTER_USER_EMAIL);
 		String userEmail = InputSanitizer.sanitizeEmail(App.scanner.next());
 
 		String userPassword = PasswordUtil.getPasswordFromUser();
@@ -72,7 +71,7 @@ public class MenuRunner {
 			ManagerMenu.displayManagerMenu(user);
 			break;
 		default:
-			System.out.println("Invalid role.");
+			System.out.println(StringConstants.INVALID_ROLE);
 			return;
 		}
 	}

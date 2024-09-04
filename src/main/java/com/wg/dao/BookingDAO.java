@@ -14,6 +14,17 @@ import com.wg.model.enums.BookingStatus;
 
 public class BookingDAO extends GenericDAO<Booking, String>{
 
+	Connection connection;
+	
+	public BookingDAO () {
+		try {
+			connection = DatabaseConfig.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	protected String getTableName() {
 		return "BOOKING";
@@ -27,6 +38,7 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 				result.getString("vehicle_id"),
 				result.getTimestamp("booking_start_time"),
 				result.getTimestamp("booking_end_time"),
+				result.getTimestamp("vehicle_return_time"),
 				BookingStatus.valueOf(result.getString("booking_status")),
 				result.getTimestamp("created_at"));
 	}
@@ -38,8 +50,9 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 		stmt.setString(3, booking.getVehicleId());
 		stmt.setTimestamp(4, booking.getBookingStartTime());
 		stmt.setTimestamp(5, booking.getBookingEndTime());
-		stmt.setString(6, booking.getBookingStatus().name());
-		stmt.setTimestamp(7, booking.getCreatedAt());
+		stmt.setTimestamp(6, booking.getVehicleReturnTime());
+		stmt.setString(7, booking.getBookingStatus().name());
+		stmt.setTimestamp(8, booking.getCreatedAt());
 	}
 
 	@Override
@@ -55,14 +68,13 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 
 	@Override
 	protected String getPlaceholders() {
-		return "?, ?, ?, ?, ?, ?, ?";
+		return "?, ?, ?, ?, ?, ?, ?, ?";
 	}
 
 	public List<Booking> getBookingsForVehicleWithinTimeRange(String vehicleId, Timestamp startTime, Timestamp endTime) throws SQLException {
         String query = "SELECT * FROM booking WHERE vehicle_id = ? AND NOT (booking_end_time <= ? OR booking_start_time >= ?)";
         
-        try (Connection connection = DatabaseConfig.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, vehicleId);
             preparedStatement.setTimestamp(2, startTime);
             preparedStatement.setTimestamp(3, endTime);
@@ -79,17 +91,27 @@ public class BookingDAO extends GenericDAO<Booking, String>{
         }
     }
 	
-	 public void cancelBooking(String bookingId) throws SQLException {
-	        String UPDATE_QUERY = "UPDATE BOOKING SET booking_status = ? WHERE booking_id = ?";
-	        System.out.println(UPDATE_QUERY);
-	        System.out.println(bookingId);
-	        try (Connection connection = DatabaseConfig.getConnection();
-	             PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)) {
+	public void cancelBooking(String bookingId) throws SQLException {
+		String UPDATE_QUERY = "UPDATE BOOKING SET booking_status = ? WHERE booking_id = ?";
+		System.out.println(UPDATE_QUERY);
+		System.out.println(bookingId);
+		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)) {
 
-	            stmt.setString(1, BookingStatus.CANCELED.name());
-	            stmt.setString(2, bookingId);
+			stmt.setString(1, BookingStatus.CANCELED.name());
+			stmt.setString(2, bookingId);
 
-	            stmt.executeUpdate();
-	        }
-	    }
+			stmt.executeUpdate();
+		}
+	}
+	
+	public void returnVehicle(String bookingId, Timestamp returnTime) throws SQLException {
+        String UPDATE_QUERY = "UPDATE Booking SET return_time = ?, status = 'AVAILABLE' WHERE booking_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)) {
+            stmt.setTimestamp(1, returnTime);
+            stmt.setString(2, bookingId);
+            stmt.executeUpdate();
+        }
+    }
 }
+
+

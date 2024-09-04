@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.wg.app.App;
 import com.wg.helper.InputSanitizer;
+import com.wg.helper.StringConstants;
 import com.wg.helper.VehiclePrinter;
 import com.wg.model.Vehicle;
 import com.wg.model.enums.AvailabilityStatus;
@@ -25,19 +26,19 @@ public class VehicleController {
 	
 	public void registerVehicle(Scanner scanner, VehicleService vehicleService) {
 		try {
-			System.out.print("Enter vehicle manufacturer: ");
+			System.out.print(StringConstants.VEHICLE_MANUFACTURER);
             String manufacturer = InputSanitizer.sanitizeName(scanner.next());
  
-            System.out.print("Enter vehicle model: ");
+            System.out.print(StringConstants.VEHICLE_MODEL);
 			String model = InputSanitizer.sanitizeName(scanner.next());
 			
-			System.out.print("Enter vehicle registeration number: ");
+			System.out.print(StringConstants.VEHICLE_REGISTERATION_NUMBER);
 			String registrationNumber = scanner.next();
 			
-			System.out.print("Enter vehicle manufacture year: ");
+			System.out.print(StringConstants.VEHICLE_MANUFACTURE_YEAR);
 			int manufactureYear = scanner.nextInt();
 			
-			System.out.print("Enter vehicle type (BIKE, CAR): ");
+			System.out.print(StringConstants.VEHICLE_TYPE);
 			String typeInput = scanner.next().toUpperCase();
 			VehicleType vehicleType = VehicleType.valueOf(typeInput);
 			
@@ -55,13 +56,13 @@ public class VehicleController {
 			newVehicle.setAvailabilityStatus(vehicleStatus);
 			
 			vehicleService.registerVehicle(newVehicle);
-			System.out.println("Vehicle registered successfully!\n");
+			System.out.println(StringConstants.VEHICLE_REGISTERED_SUCCESSFULLY);
 		}
 		catch (SQLException e) {
-            System.err.println("Error while registering vehicle: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_WHILE_REGISTERING_VEHICLE + e.getMessage());
         }
         catch (IllegalArgumentException e) {
-            System.err.println("Validation Error: " + e.getMessage());
+            System.err.println(StringConstants.VALIDATION_ERROR + e.getMessage());
         }
 	}
 	
@@ -69,22 +70,22 @@ public class VehicleController {
     public void removeVehicle(Scanner scanner) {
     	try {
         	
-        	System.out.println("List of all the vehicles: ");
+        	System.out.println(StringConstants.DISPLAYING_VEHICLES_LIST);
     		List<Vehicle> vehicles = getAllVehicles();
     		
     		int choice;
-    		System.out.print("Enter user's sr. No. to delete: ");
+    		System.out.print(StringConstants.ENTER_VEHICLE_S_SR_NO_TO_BE_DELETED);
     		choice = App.scanner.nextInt();
         	
             vehicleService.removeVehicle(vehicles.get(choice - 1).getVehicleId());
-            System.out.println("Vehicle removed successfully!");
+            System.out.println(StringConstants.VEHICLE_REMOVED_SUCCESSFULLY);
  
         }
         catch (SQLException e) {
-            System.err.println("Error while deleting user: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_WHILE_DELETING_VEHICLE + e.getMessage());
         } 
         catch (IllegalArgumentException e) {
-            System.err.println("Validation Error: " + e.getMessage());
+            System.err.println(StringConstants.VALIDATION_ERROR + e.getMessage());
         }
     }
     
@@ -93,14 +94,14 @@ public class VehicleController {
     	try {
     		List<Vehicle> vehicles = vehicleService.getAllVehicles();
     		if(vehicles == null && vehicles.size() < 0) {
-    			System.out.println("No vehicles available.");
+    			System.out.println(StringConstants.NO_VEHICLES_AVAILABLE);
     		}
-    		System.out.println("Available vehicles");
+    		
     		VehiclePrinter.printVehicles(vehicles);
     		return vehicles;
     	}
     	catch (Exception e) {
-    		System.out.println("Error retrieving vehicles: " + e.getMessage());
+    		System.out.println(StringConstants.ERROR_RETRIEVING_VEHICLES + e.getMessage());
     	}
     	return null;
     }
@@ -109,50 +110,30 @@ public class VehicleController {
         try {
             List<Vehicle> availableVehicles = vehicleService.getAvailableVehicles(startTime, endTime);
             if (availableVehicles.isEmpty()) {
-                System.out.println("No vehicles available for the specified time.");
+                System.out.println(StringConstants.NO_VEHICLES_AVAILABLE_FOR_THE_SPECIFIED_TIME);
             } else {
             	VehiclePrinter.printVehicles(availableVehicles);
             }
         } catch (SQLException e) {
-            System.out.println("An error occurred while retrieving available vehicles: " + e.getMessage());
+            System.out.println(StringConstants.AN_ERROR_OCCURRED_WHILE_RETRIEVING_AVAILABLE_VEHICLES + e.getMessage());
         }
     }
-    
-    // View All Available Vehicles
-//    public List<Vehicle> getAllAvailableVehicles() {
-//    	try {
-//    		List<Vehicle> availableVehicles = vehicleService.getAllAvailableVehicles(AvailabilityStatus.AVAILABLE);
-//
-//    		if(availableVehicles.size() == 0) {
-//    			System.out.println("There are no available vehicles");
-//    			return null;
-//    		}
-//    		
-//    		System.out.println("Listing all available vehicles");
-//    		VehiclePrinter.printVehicles(availableVehicles);
-//    		return availableVehicles;
-//    	}
-//    	catch (Exception e) {
-//    		System.out.println("Error retrieving available vehicles: " + e.getMessage());
-//    	}
-//    	return null;
-//    }
 
 	public List<Vehicle> getAllMaintenanceVehicles() {
 		try {
 			List<Vehicle> maintenanceVehicles = vehicleService.getAllMaintenanceVehicles(AvailabilityStatus.AVAILABLE);
 			
 			if(maintenanceVehicles.size() == 0) {
-    			System.out.println("There are no available vehicles");
+    			System.out.println(StringConstants.NO_VEHICLES_AVAILABLE);
     			return null;
     		}
 			
-			System.out.println("Getting all maintenance vehicles");
+			System.out.println(StringConstants.GETTING_ALL_MAINTENANCE_VEHICLES);
 			VehiclePrinter.printVehicles(maintenanceVehicles);
 			return maintenanceVehicles;
 		}
 		catch (Exception e) {
-    		System.out.println("Error retrieving maintenance vehicles: " + e.getMessage());
+    		System.out.println(StringConstants.ERROR_RETRIEVING_MAINTENANCE_VEHICLES + e.getMessage());
     	}
 		return null;
 		
@@ -161,16 +142,16 @@ public class VehicleController {
 	public void changeVehicleStatus() {
 		try {
         	
-        	System.out.println("List of all the vehicles: ");
+        	System.out.println(StringConstants.DISPLAYING_VEHICLES_LIST);
     		List<Vehicle> vehicles = getAllVehicles();
     		
     		int choice;
-    		System.out.print("Enter vehicle sr. No. to change status: ");
+    		System.out.print(StringConstants.ENTER_VEHICLE_SR_NO_TO_CHANGE_STATUS);
     		choice = App.scanner.nextInt();
         	
     		AvailabilityStatus status = null;
     		while(true) {
-    			System.out.print("Enter vehicle status to be changed into(AVAILABLE, BOOKED, MAINTENANCE): ");
+    			System.out.print(StringConstants.VEHICLE_STATUS_TO_BE_CHANGED_INTO);
         		String input = App.scanner.next().toUpperCase();
                 status = AvailabilityStatus.valueOf(input);
                 
@@ -178,19 +159,19 @@ public class VehicleController {
                 	break;
                 }
                 else {
-                	System.out.println("Please enter a valid role.");
+                	System.out.println(StringConstants.PLEASE_ENTER_A_VALID_STATUS);
                 }
     		}
     		
             vehicleService.changeVehicleStatus(vehicles.get(choice - 1).getVehicleId(), status);
-            System.out.println("Vehicle status changed successfully!");
+            System.out.println(StringConstants.VEHICLE_STATUS_CHANGED_SUCCESSFULLY);
  
         }
         catch (SQLException e) {
-            System.err.println("Error while deleting user: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_WHILE_CHANGING_STATUS + e.getMessage());
         } 
         catch (IllegalArgumentException e) {
-            System.err.println("Validation Error: " + e.getMessage());
+            System.err.println(StringConstants.VALIDATION_ERROR + e.getMessage());
         }
 	}
 }

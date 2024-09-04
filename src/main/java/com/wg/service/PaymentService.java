@@ -19,8 +19,8 @@ public class PaymentService {
 		this.paymentDAO = paymentDAO;
 	}
 	
-	public void processPayment(Booking booking, PaymentMethod paymentMethod) throws SQLException {
-        BigDecimal amount = BillingUtil.calculateTotalAmount(booking.getBookingStartTime(), booking.getBookingEndTime());
+	public void processPayment(Booking booking, PaymentMethod paymentMethod,Timestamp returnTime, String vehicleType) throws SQLException {
+        BigDecimal amount = BillingUtil.calculateTotalAmount(booking.getBookingStartTime(), booking.getBookingEndTime(), returnTime, vehicleType);
 
         Payment payment = new Payment();
         payment.setPaymentId();
@@ -31,10 +31,4 @@ public class PaymentService {
 
         paymentDAO.add(payment);
     }
-	
-//	private BigDecimal calculatePaymentAmount(Timestamp startTime, Timestamp endTime, BigDecimal hourlyRate) {
-//        long milliseconds = endTime.getTime() - startTime.getTime();
-//        BigDecimal hours = new BigDecimal(milliseconds / (1000 * 60 * 60));
-//        return hours.multiply(hourlyRate);
-//    }
 }

@@ -15,6 +15,16 @@ import com.wg.model.enums.VehicleType;
 
 public class VehicleDAO extends GenericDAO<Vehicle, String> {
 
+	Connection connection;
+	
+	public VehicleDAO () {
+		try {
+			connection = DatabaseConfig.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	protected String getTableName() {
 		return "VEHICLE";
@@ -65,8 +75,7 @@ public class VehicleDAO extends GenericDAO<Vehicle, String> {
 	public List<Vehicle> getAllMaintenanceVehicles(AvailabilityStatus status) throws SQLException {
 		String SELECT_QUERY = "SELECT * FROM " + getTableName() + " WHERE availability_status = ?";
 		List<Vehicle> maintenanceVehicles = new ArrayList<>();
-		try(Connection connection = DatabaseConfig.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
+		try(PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
 			stmt.setString(1, status.name());
 			try(ResultSet result = stmt.executeQuery()) {
 				while(result.next()) {
@@ -79,13 +88,10 @@ public class VehicleDAO extends GenericDAO<Vehicle, String> {
 
 	public void updateStatusQuery(String vehicleId, AvailabilityStatus status) throws SQLException {
 		String UPDATE_QUERY = "UPDATE " + getTableName() + " SET availability_status = \"BOOKED\" WHERE " + getPrimaryKeyColumn() + " = ?";
-		try (Connection connection = DatabaseConfig.getConnection();
-        		PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)){
-//			setPreparedStatementForEntity(stmt, vehicle);
+		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)){
 			setPreparedStatementForPrimaryKey(stmt, vehicleId);
 			stmt.executeUpdate();
-		}
-		
+		}	
 	}
 
 //	public List<Vehicle> getAllAvailableVehicles(AvailabilityStatus status) throws SQLException {
@@ -108,8 +114,7 @@ public class VehicleDAO extends GenericDAO<Vehicle, String> {
 	                       "(SELECT 1 FROM booking b WHERE b.vehicle_id = v.vehicle_id " +
 	                       "AND NOT (b.booking_end_time <= ? OR b.booking_start_time >= ?))";
 	        
-	        try (Connection connection = DatabaseConfig.getConnection();
-	             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 	            preparedStatement.setTimestamp(1, startTime);
 	            preparedStatement.setTimestamp(2, endTime);
 	            

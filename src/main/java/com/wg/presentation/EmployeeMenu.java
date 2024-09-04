@@ -16,8 +16,6 @@ import com.wg.service.VehicleService;
 public class EmployeeMenu {
 
 	public static void displayEmployeeMenu(User user) {
-	
-		
 		UserDAO userDAO = new UserDAO();
 		UserRegisterService userRegisterService = new UserRegisterService(userDAO);
 		UserController userController= new UserController(userRegisterService); 
@@ -40,42 +38,43 @@ public class EmployeeMenu {
             
             switch(choice) {
 	        case 1:
-	        	System.out.println("Displaying customers list");
+	        	System.out.println(StringConstants.DISPLAYING_CUSTOMERS_LIST);
 	        	userController.getAllCustomers();
 	        	break;
 	        case 2:
-	        	System.out.println("Displaying vehicles list");
+	        	System.out.println(StringConstants.DISPLAYING_VEHICLES_LIST);
 	        	vehicleController.getAllVehicles();
 	        	break;
 	        case 3:
-	        	System.out.println("Raising a complaint");
+	        	System.out.println(StringConstants.RAISING_A_COMPLAINT);
 	        	complaintController.raiseComplaint(user);
 	        	break;
 	        case 4:
-	        	System.out.println("Updating vehicle status");
+	        	System.out.println(StringConstants.UPDATING_VEHICLE_STATUS);
+	        	vehicleController.changeVehicleStatus();
 	        	break;
 	        case 5:
-	        	System.out.println("Logging out...");
+	        	System.out.println(StringConstants.LOGGING_OUT);
 	        	
 	        	while(true) {
-	        		System.out.print("Do you want to continue? (Y/N): ");
+	        		System.out.print(StringConstants.DO_YOU_WANT_TO_CONTINUE);
 		        	
 			        String continueChoice = App.scanner.next();
 			        if(continueChoice.equalsIgnoreCase("y")) {
 			        	continue;
 			        }
 			        else if(continueChoice.equalsIgnoreCase("n")) {
-			        	System.out.println("Thank you for visiting...");
+			        	System.out.println(StringConstants.THANK_YOU_FOR_VISITING);
 			        	System.exit(0);
 			        	break;
 			        }
 			        else {
-			        	System.out.println("Please enter valid input.");
+			        	System.out.println(StringConstants.INVALID_INPUT);
 			        }
 	        	}
 	        	break;
 	        default:
-	        	System.out.println("Invalid choice. Please enter valid choice.");
+	        	System.out.println(StringConstants.INVALID_CHOICE_PLEASE_ENTER_VALID_CHOICE);
 	        }
         }
     }

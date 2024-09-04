@@ -7,9 +7,8 @@ import java.util.List;
 
 import com.wg.app.App;
 import com.wg.dao.NotificationDAO;
-import com.wg.helper.ComplaintPrinter;
 import com.wg.helper.ReviewPrinter;
-import com.wg.model.Complaint;
+import com.wg.helper.StringConstants;
 import com.wg.model.Review;
 import com.wg.model.User;
 import com.wg.service.NotificationService;
@@ -17,7 +16,7 @@ import com.wg.service.ReviewService;
 
 public class ReviewController {
 
-    private ReviewService reviewService;
+	private ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
@@ -32,13 +31,13 @@ public class ReviewController {
     	try {
     		int rating;
     		while(true) {
-    			System.out.println("Enter rating (1-5): ");
+    			System.out.println(StringConstants.ENTER_RATING);
                 rating = App.scanner.nextInt();
                 if(rating >= 1 && rating <= 5) {
                 	break;
                 }
                 else {
-                	System.out.println("Please enter a valid number.");
+                	System.out.println(StringConstants.PLEASE_ENTER_A_VALID_NUMBER);
                 	continue;
                 }
     		}
@@ -47,7 +46,7 @@ public class ReviewController {
             
             Timestamp createdAt = Timestamp.valueOf(LocalDateTime.now());
             
-            System.out.println("Enter your review description: ");
+            System.out.println(StringConstants.YOUR_REVIEW_DESCRIPTION);
             String description = App.scanner.nextLine();
             
         	Review newReview = new Review();
@@ -60,10 +59,10 @@ public class ReviewController {
             reviewService.addReview(newReview);
             
             // Send notification after review is added
-            notificationController.sendNotification(user.getUserId(), "Review added successfully.");
+            notificationController.sendNotification(user.getUserId(), StringConstants.REVIEW_ADDED_SUCCESSFULLY);
         }
         catch (SQLException e) {
-            System.out.println("Error adding review: " + e.getMessage());
+            System.out.println(StringConstants.ERROR_ADDING_REVIEW + e.getMessage());
         }
     }
 
@@ -71,23 +70,23 @@ public class ReviewController {
     public void deleteReview() {
     	try {
         	
-        	System.out.println("List of all the reviews: ");
+        	System.out.println(StringConstants.LIST_OF_ALL_THE_REVIEWS);
     		List<Review> reviews = viewAllReviews();
     		
     		int choice;
-    		System.out.print("Enter rating sr. No. to delete: ");
+    		System.out.print(StringConstants.ENTER_RATING_SR_NO_TO_DELETE);
     		choice = App.scanner.nextInt();
  
             reviewService.deleteReview(reviews.get(choice - 1).getReviewId());
-            System.out.println("Review deleted successfully!");
+            System.out.println(StringConstants.REVIEW_DELETED_SUCCESSFULLY);
             
  
         }
         catch (SQLException e) {
-            System.err.println("Error while deleting user: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_WHILE_DELETING_REVIEW + e.getMessage());
         } 
         catch (IllegalArgumentException e) {
-            System.err.println("Validation Error: " + e.getMessage());
+            System.err.println(StringConstants.VALIDATION_ERROR + e.getMessage());
         }
     }
 
@@ -95,12 +94,12 @@ public class ReviewController {
     public List<Review> viewAllReviews() {
     	try {
     		List<Review> reviews = reviewService.getAllReviews();
-    		System.out.println("Getting all reviews");
+    		System.out.println(StringConstants.LIST_OF_ALL_THE_REVIEWS);
     		ReviewPrinter.printReviews(reviews);
     		return reviews;
     	}
     	catch (Exception e) {
-    		System.out.println("Error retrieving users: " + e.getMessage());
+    		System.out.println(StringConstants.ERROR_RETRIEVING_REVIEWS + e.getMessage());
     		return null;
     	}
     }
@@ -111,10 +110,10 @@ public class ReviewController {
             if (review != null) {
                 ReviewPrinter.printReviews(review);
             } else {
-                System.out.println("No complaint found with the provided ID.");
+                System.out.println(StringConstants.NO_COMPLAINT_FOUND_WITH_THE_PROVIDED_ID);
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving review: " + e.getMessage());
+            System.out.println(StringConstants.ERROR_RETRIEVING_REVIEWS + e.getMessage());
         }
     }
 }

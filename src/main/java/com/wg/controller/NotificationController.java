@@ -3,6 +3,7 @@ package com.wg.controller;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.wg.helper.StringConstants;
 import com.wg.model.Notification;
 import com.wg.service.NotificationService;
 
@@ -17,10 +18,10 @@ public class NotificationController {
 	public void sendNotification(String userId, String message) throws SQLException {
 		try {
             notifService.sendNotification(userId, message);
-            System.out.println("Notification sent successfully.");
+            System.out.println(StringConstants.NOTIFICATION_SENT_SUCCESSFULLY);
         } 
 		catch (SQLException e) {
-            System.err.println("Error sending notification: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_SENDING_NOTIFICATION + e.getMessage());
         }
 	}
 	
@@ -30,7 +31,7 @@ public class NotificationController {
             notifications.forEach(notification -> System.out.println(notification.getNotificationMessage()));
         } 
 		catch (SQLException e) {
-            System.err.println("Error retrieving notifications: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_RETRIEVING_NOTIFICATIONS + e.getMessage());
         }
     }
 }

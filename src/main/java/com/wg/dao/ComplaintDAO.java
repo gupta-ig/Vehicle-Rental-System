@@ -49,4 +49,13 @@ public class ComplaintDAO extends GenericDAO<Complaint, String>{
 		return "?, ?, ?, ?, ?";
 	}
 
+	public void updateStatusQuery(String complaintId, ComplaintStatus status) throws SQLException {
+		String UPDATE_QUERY = "UPDATE " + getTableName() + " SET complaint_status = ? WHERE " + getPrimaryKeyColumn() + " = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)){
+			stmt.setString(1, status.name());
+			setPreparedStatementForPrimaryKey(stmt, complaintId);
+			stmt.executeUpdate();
+		}
+	}
+
 }

@@ -14,6 +14,7 @@ import com.wg.dao.PaymentDAO;
 import com.wg.dao.VehicleDAO;
 import com.wg.helper.BillingUtil;
 import com.wg.helper.BookingPrinter;
+import com.wg.helper.StringConstants;
 import com.wg.helper.VehiclePrinter;
 import com.wg.model.Booking;
 import com.wg.model.Vehicle;
@@ -47,153 +48,54 @@ public class BookingController {
     PaymentService paymentService = new PaymentService(paymentDAO);
     PaymentController paymentController = new PaymentController(paymentService);
 
-    
-//	public void bookAVehicle(String userId) {
-//
-//		List<Vehicle> vehicles = vehicleController.getAllAvailableVehicles();
-//		
-//		if(vehicles == null) {
-//			return;
-//		}
-//		
-//		int choice;
-//		System.out.print("Enter vehicle Sr. No. to book the vehicle: ");
-//		choice = App.scanner.nextInt();
-//		App.scanner.nextLine();
-//		
-//		
-//		String vehicleId = vehicles.get(choice - 1).getVehicleId();
-//		
-//		try {
-//			Booking newBooking = new Booking();
-//			
-//			newBooking.setBookingId();
-//			newBooking.setCustomerId(userId);
-//			newBooking.setVehicleId(vehicleId);
-//		
-//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//    		System.out.println("Enter start date and time (yyyy-MM-dd HH:mm:ss): ");
-//
-//			Timestamp startTime = null;
-//	        while(true) {
-//	        	try {
-//	    			String startInput = App.scanner.nextLine();
-//	    			
-//	                LocalDateTime dateTime = LocalDateTime.parse(startInput, formatter);
-//	                
-//	                if(dateTime.isBefore(LocalDateTime.now())) {
-//	                	System.err.println("The start time cannot be in the past. please enter a valid future date and time.");
-//	                	continue;
-//	                }
-//	                
-//	                startTime = Timestamp.valueOf(dateTime); 
-//	                newBooking.setBookingStartTime(startTime);
-//	                break;
-//	                
-//	            }
-//	            catch (Exception e) {
-//	                System.err.println("Invalid date format. Please use 'yyyy-MM-dd HH:mm:ss'.");
-//	        		System.out.println("Enter start date and time (yyyy-MM-dd HH:mm:ss): ");
-//
-//	            }
-//	        }
-//    		System.out.println("Enter end date and time (yyyy-MM-dd HH:mm:ss): ");
-//
-//			Timestamp endTime = null;
-//	        while(true) {
-//	        	try {
-//	    			String endInput = App.scanner.nextLine();
-//	    			
-//	                LocalDateTime dateTime = LocalDateTime.parse(endInput, formatter);
-//	                
-//	                if (dateTime.isBefore(LocalDateTime.now())) {
-//	                    System.err.println("The end time cannot be in the past. Please enter a valid future date and time.");
-//	                    continue;
-//	                }
-//
-//	                if (startTime != null && dateTime.isBefore(startTime.toLocalDateTime())) {
-//	                    System.err.println("The end time cannot be before the start time. Please enter a valid end date and time.");
-//	                    continue;
-//	                }
-//	                
-//	                endTime = Timestamp.valueOf(dateTime); 
-//	                newBooking.setBookingEndTime(endTime);
-//	                break;
-//	            }
-//	            catch (Exception e) {
-//	                System.err.println("Invalid date format. Please use 'yyyy-MM-dd HH:mm:ss'.");
-//	        		System.out.println("Enter end date and time (yyyy-MM-dd HH:mm:ss): ");
-//
-//	            }
-//	        }
-//	        
-//			newBooking.setBookingStatus(BookingStatus.BOOKED);
-//			
-//			BigDecimal totalAmount = BillingUtil.calculateTotalAmount(startTime, endTime);
-//			newBooking.setTotalAmount(totalAmount);
-//			
-//			bookingService.bookAVehicle(newBooking);	
-//			
-//			// Send notification after booking is successful
-//            notificationController.sendNotification(userId, "Your vehicle has been successfully booked.");
-//			
-//			vehicleService.changeVehicleStatus(vehicleId, AvailabilityStatus.BOOKED);
-//			
-//		}
-//		catch (SQLException e) {
-//			System.err.println("Error while booking vehicle: " + e.getMessage());
-//		}
-//
-//	}
 
     public void makeBooking(Scanner scanner, String userId) {
         Timestamp startTime = null;
         Timestamp endTime = null;
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(StringConstants.DATE_FORMATTER);
         
         while (true) {
-        	System.out.println("Enter start date and time (yyyy-MM-dd HH:mm:ss): ");
+        	System.out.println(StringConstants.ENTER_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS);
             String startInput = scanner.nextLine();
-            // Assume formatter is defined elsewhere
             try {
                 startTime = Timestamp.valueOf(LocalDateTime.parse(startInput, formatter));
                 if (startTime.after(Timestamp.valueOf(LocalDateTime.now()))) {
                     break;
                 } else {
-                    System.out.println("Start time cannot be before the current time.");
+                    System.out.println(StringConstants.START_TIME_CANNOT_BE_BEFORE_THE_CURRENT_TIME);
                 }
             } catch (Exception e) {
-                System.out.println("Invalid date format. Please try again.");
+                System.out.println(StringConstants.INVALID_DATE_FORMAT_PLEASE_TRY_AGAIN);
             }
         }
 
         while (true) {
-            System.out.println("Enter end date and time (yyyy-MM-dd HH:mm:ss): ");
+            System.out.println(StringConstants.ENTER_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS);
             String endInput = scanner.nextLine();
             try {
                 endTime = Timestamp.valueOf(LocalDateTime.parse(endInput, formatter));
                 if (endTime.after(startTime)) {
                     break;
                 } else {
-                    System.out.println("End time should be after start time.");
+                    System.out.println(StringConstants.END_TIME_SHOULD_BE_AFTER_START_TIME);
                 }
             } catch (Exception e) {
-                System.out.println("Invalid date format. Please try again.");
+                System.out.println(StringConstants.INVALID_DATE_FORMAT_PLEASE_TRY_AGAIN);
             }
         }
 
         try {
             List<Vehicle> availableVehicles = vehicleService.getAvailableVehicles(startTime, endTime);
             if (availableVehicles.isEmpty()) {
-                System.out.println("No vehicles available for the selected time.");
+                System.out.println(StringConstants.NO_VEHICLES_AVAILABLE_FOR_THE_SELECTED_TIME);
             } else {
-                System.out.println("Available vehicles:");
+                System.out.println(StringConstants.AVAILABLE_VEHICLES);
                 VehiclePrinter.printVehicles(availableVehicles);
                 //availableVehicles.forEach(vehicle -> System.out.println(vehicle.getVehicleName()));
 
                 int choice;
-        		System.out.print("Enter vehicle Sr. No. to book the vehicle: ");
+        		System.out.print(StringConstants.VEHICLE_SR_NO_TO_BOOK_THE_VEHICLE);
         		choice = App.scanner.nextInt();
         		App.scanner.nextLine();
         		
@@ -211,16 +113,16 @@ public class BookingController {
         		
                 if (bookingService.isVehicleAvailable(availableVehicles.get(choice - 1).getVehicleId(), startTime, endTime)) {
                     bookingService.bookVehicle(booking);
-                    System.out.println("Vehicle booked successfully!");
+                    System.out.println(StringConstants.VEHICLE_BOOKED_SUCCESSFULLY);
                     
                     paymentController.handlePayment(booking);
                     
                 } else {
-                    System.out.println("Selected vehicle is not available for the specified time.");
+                    System.out.println(StringConstants.SELECTED_VEHICLE_IS_NOT_AVAILABLE_FOR_THE_SPECIFIED_TIME);
                 }
             }
         } catch (SQLException e) {
-            System.out.println("An error occurred during booking: " + e.getMessage());
+            System.out.println(StringConstants.AN_ERROR_OCCURRED_DURING_BOOKING + e.getMessage());
         }
     }
     
@@ -233,7 +135,7 @@ public class BookingController {
 			return bookings;
 		}
 		else {
-			System.out.println("Not booked any vehicle yet.");
+			System.out.println(StringConstants.NOT_BOOKED_ANY_VEHICLE_YET);
 		}
 		return null;
 	}
@@ -242,24 +144,49 @@ public class BookingController {
         try {
         	
         	if(viewHistory(userId) == null && viewHistory(userId).size() <= 0) {
-        		System.out.println("No Past Bookings.");
+        		System.out.println(StringConstants.NO_PAST_BOOKINGS);
         	}
         	BookingPrinter.printBookings(viewHistory(userId));
         	
         	int choice;
-    		System.out.print("Enter vehicle Sr. No. to cancel the vehicle booking: ");
+    		System.out.print(StringConstants.VEHICLE_SR_NO_TO_CANCEL_THE_VEHICLE_BOOKING);
     		choice = App.scanner.nextInt();
     		App.scanner.nextLine();
     		
     		bookingService.cancelBooking(viewHistory(userId).get(choice - 1).getBookingId(), viewHistory(userId).get(choice - 1).getVehicleId());
     	
-            System.out.println("Booking canceled successfully!");
+            System.out.println(StringConstants.BOOKING_CANCELED_SUCCESSFULLY);
             
         } catch (SQLException e) {
-            System.err.println("Error canceling booking: " + e.getMessage());
+            System.err.println(StringConstants.ERROR_CANCELING_BOOKING + e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.err.println("Invalid input: " + e.getMessage());
+            System.err.println(StringConstants.INVALID_INPUT + e.getMessage());
         }
     }
 
+	public void returnVehicle(String userId) {
+        try {
+        	if(viewHistory(userId) == null && viewHistory(userId).size() <= 0) {
+        		System.out.println(StringConstants.NO_PAST_BOOKINGS);
+        	}
+        	BookingPrinter.printBookings(viewHistory(userId));
+        	
+        	int choice;
+    		System.out.print(StringConstants.VEHICLE_SR_NO_TO_RETURN_THE_VEHICLE_BOOKING);
+    		choice = App.scanner.nextInt();
+    		App.scanner.nextLine();
+    		
+    		bookingService.returnVehicle(viewHistory(userId).get(choice - 1).getBookingId());
+    		
+    		System.out.println(StringConstants.VEHICLE_RETURNED_SUCCESSFULLY);
+        }
+        catch (SQLException e) {
+            System.err.println(StringConstants.ERROR_RETURNING_VEHICLE + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println(StringConstants.INVALID_INPUT + e.getMessage());
+        }
+		
+        
+    }
+	
 }

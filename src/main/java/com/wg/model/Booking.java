@@ -12,17 +12,19 @@ public class Booking {
     private String vehicleId;
     private Timestamp bookingStartTime;
     private Timestamp bookingEndTime;
+    private Timestamp vehicleReturnTime;
     private BookingStatus bookingStatus;
     private Timestamp createdAt;
     
 	public Booking(String bookingId, String customerId, String vehicleId, Timestamp bookingStartTime,
-			Timestamp bookingEndTime, BookingStatus bookingStatus, Timestamp createdAt) {
+			Timestamp bookingEndTime,Timestamp vehicleReturnTime, BookingStatus bookingStatus, Timestamp createdAt) {
 		super();
 		this.bookingId = (bookingId == null) ? UUID.randomUUID().toString() : bookingId;
 		this.customerId = customerId;
 		this.vehicleId = vehicleId;
 		this.bookingStartTime = bookingStartTime;
 		this.bookingEndTime = bookingEndTime;
+		this.vehicleReturnTime = vehicleReturnTime;
 		this.bookingStatus = bookingStatus;
 		this.createdAt = createdAt;
 	}
@@ -62,7 +64,12 @@ public class Booking {
 	public void setBookingEndTime(Timestamp bookingEndTime) {
 		this.bookingEndTime = bookingEndTime;
 	}
-	
+	public Timestamp getVehicleReturnTime() {
+		return vehicleReturnTime;
+	}
+	public void setVehicleReturnTime(Timestamp vehicleReturnTime) {
+		this.vehicleReturnTime = vehicleReturnTime;
+	}
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -76,8 +83,15 @@ public class Booking {
 	
 	@Override
 	public String toString() {
-		return "Booking [bookingId=" + bookingId + ", customerId=" + customerId + ", vehicleId=" + vehicleId
-				+ ", bookingStartTime=" + bookingStartTime + ", bookingEndTime=" + bookingEndTime + ", bookingStartTime=" + bookingStartTime + ", bookingEndTime=" + bookingEndTime +  ", createdAt=" + createdAt + "]";
+		return "Booking [bookingId=" + bookingId +
+				", customerId=" + customerId + 
+				", vehicleId=" + vehicleId +
+				", bookingStartTime=" + bookingStartTime +
+				", bookingEndTime=" + bookingEndTime + 
+				", bookingEndTime=" + vehicleReturnTime + 
+				", vehicleReturnTime=" + bookingStartTime +
+				", bookingEndTime=" + bookingEndTime + 
+				", createdAt=" + createdAt + "]";
 	}
 	
 }

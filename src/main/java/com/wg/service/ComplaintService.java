@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.wg.dao.ComplaintDAO;
 import com.wg.model.Complaint;
+import com.wg.model.enums.ComplaintStatus;
 
 public class ComplaintService {
 	
@@ -26,4 +27,8 @@ public class ComplaintService {
     public List<Complaint> getComplaintById(String userId) throws SQLException {
         return complaintDAO.getById(userId);
     }
+
+	public void changeComplaintStatus(String complaintId, ComplaintStatus status) throws SQLException {
+		complaintDAO.updateStatusQuery(complaintId, status);
+	}
 }
