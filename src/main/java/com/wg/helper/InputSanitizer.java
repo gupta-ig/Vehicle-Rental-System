@@ -20,5 +20,9 @@ public class InputSanitizer {
 		// Trim whitespace and allow only letters, spaces and basic punctuation
 		return name.trim().replaceAll("[^a-zA-Z\\s\\-\\.]", "");
 	}
+
+	public static String sanitizeRegistrationNumber(String regNo) {
+		return regNo.trim();
+	}
 	
 }

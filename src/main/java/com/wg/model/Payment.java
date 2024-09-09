@@ -10,15 +10,17 @@ public class Payment {
 	private String paymentId;
 	private String bookingId;
 	private BigDecimal amountPaid;
+	private BigDecimal finePaid;
 	private Timestamp paymentDate;
 	private PaymentMethod paymentMethod;
 	
-	public Payment(String paymentId, String bookingId, BigDecimal amountPaid, Timestamp paymentDate,
+	public Payment(String paymentId, String bookingId, BigDecimal amountPaid,BigDecimal finePaid, Timestamp paymentDate,
 			 PaymentMethod paymentMethod) {
 		super();
 		this.paymentId = (paymentId == null) ? UUID.randomUUID().toString() : paymentId;
 		this.bookingId = bookingId;
 		this.amountPaid = amountPaid;
+		this.finePaid = finePaid;
 		this.paymentDate = paymentDate;
 		this.paymentMethod = paymentMethod;
 	}
@@ -43,6 +45,12 @@ public class Payment {
 	public void setAmountPaid(BigDecimal amountPaid) {
 		this.amountPaid = amountPaid;
 	}
+	public BigDecimal getFinePaid() {
+		return finePaid;
+	}
+	public void setFinePaid(BigDecimal finePaid) {
+		this.finePaid = finePaid;
+	}
 	public Timestamp getPaymentDate() {
 		return paymentDate;
 	}
@@ -62,8 +70,9 @@ public class Payment {
 	public String toString() {
 		return "Payment [paymentId=" + paymentId +
 				", bookingId=" + bookingId + 
-				", amountPaid=" + amountPaid
-				+ ", paymentDate=" + paymentDate + 
+				", amountPaid=" + amountPaid +
+				", finePaid=" + finePaid +
+				", paymentDate=" + paymentDate + 
 				", paymentMethod=" + paymentMethod + "]";
 	}
 	

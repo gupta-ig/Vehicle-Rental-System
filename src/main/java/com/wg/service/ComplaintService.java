@@ -29,6 +29,13 @@ public class ComplaintService {
     }
 
 	public void changeComplaintStatus(String complaintId, ComplaintStatus status) throws SQLException {
-		complaintDAO.updateStatusQuery(complaintId, status);
+		List<Complaint> complaint = complaintDAO.getById(complaintId);
+		if(complaint.get(0).getComplaintStatus().equals(status)) {
+			System.out.println("The complaint already have same status.");
+		}
+		else {
+			complaintDAO.updateStatusQuery(complaintId, status);
+		}
+		
 	}
 }

@@ -40,13 +40,7 @@ public class BookingService {
 		vehicleDAO.updateStatusQuery(vehicleId, AvailabilityStatus.AVAILABLE);
     }
 	
-	public void returnVehicle(String bookingId) {
-        Timestamp returnTime = Timestamp.valueOf(LocalDateTime.now());
-        try {
-            bookingDAO.returnVehicle(bookingId, returnTime);
-            System.out.println("Vehicle returned successfully.");
-        } catch (SQLException e) {
-            System.err.println("Error while returning vehicle: " + e.getMessage());
-        }
+	public void returnVehicle(String bookingId, Timestamp returnTime) throws SQLException {
+        bookingDAO.returnVehicle(bookingId, returnTime);
     }
 }

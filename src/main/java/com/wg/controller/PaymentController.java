@@ -1,26 +1,41 @@
 package com.wg.controller;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.logging.Logger;
 
 import com.wg.app.App;
+import com.wg.dao.NotificationDAO;
+import com.wg.helper.LoggingUtil;
 import com.wg.helper.StringConstants;
 import com.wg.model.Booking;
 import com.wg.model.enums.PaymentMethod;
+import com.wg.service.NotificationService;
 import com.wg.service.PaymentService;
 
 public class PaymentController {
 	private final PaymentService paymentService;
+	
+	NotificationDAO notificationDAO = new NotificationDAO();
+    NotificationService notificationService = new NotificationService(notificationDAO);
+    NotificationController notificationController = new NotificationController(notificationService);
 
+    private static final Logger logger = LoggingUtil.getLogger(BookingController.class);
+    
 	public PaymentController(PaymentService paymentService) {
 		super();
 		this.paymentService = paymentService;
 	}
 	
 	public void handlePayment(Booking booking) {
+		PaymentMethod paymentMethod = inputPaymentMethod();
+        try {
+            paymentService.processPayment(booking, paymentMethod);
+        } catch (SQLException e) {
+            System.err.println(StringConstants.ERROR_PROCESSING_PAYMENT + e.getMessage());
+        }
+    }
 
+	public PaymentMethod inputPaymentMethod() {
 		String paymentInput = "";
 		boolean validInput = false;
         while(!validInput) {
@@ -34,33 +49,7 @@ public class PaymentController {
             	System.out.println(StringConstants.PLEASE_ENTER_VALID_INPUT);
             }
         }
-
         PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentInput);
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(StringConstants.DATE_FORMATTER);
-        
-        Timestamp returnTime = null;
-        
-        while (true) {
-            System.out.print(StringConstants.ENTER_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS);
-            String returnInput = App.scanner.nextLine();
-            try {
-            	returnTime = Timestamp.valueOf(LocalDateTime.parse(returnInput, formatter));
-                if (returnTime.after(Timestamp.valueOf(LocalDateTime.now()))) {
-                    break;
-                } else {
-                    System.out.println(StringConstants.THE_RETURN_TIME_CANNOT_BE_IN_PAST);
-                }
-            } catch (Exception e) {
-                System.out.println(StringConstants.INVALID_DATE_FORMAT_PLEASE_TRY_AGAIN);
-            }
-        }
-        
-        try {
-            paymentService.processPayment(booking, paymentMethod, returnTime, booking.getVehicleReturnTime().toString());
-            System.out.println(StringConstants.PAYMENT_PROCESSED_SUCCESSFULLY);
-        } catch (SQLException e) {
-            System.err.println(StringConstants.ERROR_PROCESSING_PAYMENT + e.getMessage());
-        }
-    }
+		return paymentMethod;
+	}
 }

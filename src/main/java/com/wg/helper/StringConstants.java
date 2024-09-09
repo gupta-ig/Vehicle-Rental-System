@@ -3,6 +3,7 @@ package com.wg.helper;
 public class StringConstants {
 	
 	public static final String STARTER_MENU = """
+
 			-------- WELCOME TO VEHICLE RENTAL SYSTEM --------
 			
 			1. Register a new user
@@ -12,6 +13,7 @@ public class StringConstants {
 			""";
 
 	public static final String ADMIN_MENU = """
+			
 			--------Welcome Admin--------
 			
 			1. User Management
@@ -69,43 +71,53 @@ public class StringConstants {
 			""";
 	
 	public static final String CUSTOMER_MENU = """
+			
 			--------Welcome Customer--------
 			
 			1. Book a vehicle
-			2. View booking history
-			3. Would you like to give a review???
-			4. See all reviews added by you
-			5. Want to raise complaint???
-			6. See all complaints raised by you
-			7. Cancel booking
-			8. Logout
+			2. Return a vehicle
+			3. View booking history
+			4. Would you like to give a review?
+			5. See all reviews added by you
+			6. Want to raise complaint?
+			7. See all complaints raised by you
+			8. Cancel booking
+			9. Logout
 			
 	        """;
 	
 	public static final String EMPLOYEE_MENU = """
+			
 			--------Welcome Employee--------
 			
 	        1. Get All Customers.
 	        2. Get All Vehicles.
-	        3. Want to raise complaint???
-	        4. See complaints raised by you
-	        5. Update Vehicle Status.
-	        6. Logout.
+	        3. Get All Maintenance Vehicles.
+	        4. Want to raise complaint?
+	        5. See complaints raised by you
+	        6. Update Vehicle Status.
+	        7. Logout.
 	        
 	        """;
 
 	public static final String MANAGER_MENU = """
+			
 			--------Welcome Manager--------
 			
 	        1. Get All Vehicles.
 	        2. Get All Maintenance Vehicles.
 	        3. Update Vehicle Status.
-	        4. Logout.
+	        4. Want to raise complaint?
+	        5. Logout.
 	        
 	        """;
-	
+
+	public static final String NO_REVIEWS_PUBLISHED = "No reviews published.";
+
 	public static final String START_TIME_CANNOT_BE_BEFORE_THE_CURRENT_TIME = "Start time cannot be before the current time.";
-	public static final String ENTER_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS = "Enter date and time (yyyy-MM-dd HH:mm:ss): ";
+	public static final String ENTER_START_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS = "Enter start date and time (yyyy-MM-dd HH:mm:ss): ";
+	public static final String ENTER_END_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS = "Enter end date and time (yyyy-MM-dd HH:mm:ss): ";
+	public static final String ENTER_RETURN_DATE_AND_TIME_YYYY_MM_DD_HH_MM_SS = "Enter return date and time (yyyy-MM-dd HH:mm:ss): ";
 	public static final String END_TIME_SHOULD_BE_AFTER_START_TIME = "End time should be after start time.";
 	public static final String INVALID_DATE_FORMAT_PLEASE_TRY_AGAIN = "Invalid date format. Please try again.";
 	public static final String NO_VEHICLES_AVAILABLE_FOR_THE_SELECTED_TIME = "No vehicles available for the selected time.";
@@ -156,7 +168,7 @@ public class StringConstants {
     public static final String VALIDATION_ERROR = "Validation Error: ";
     public static final String ERROR_WHILE_DELETING_REVIEW = "Error while deleting review: ";
     public static final String REVIEW_DELETED_SUCCESSFULLY = "Review deleted successfully!";
-    public static final String ENTER_RATING_SR_NO_TO_DELETE = "Enter rating sr. No. to delete: ";
+    public static final String ENTER_REVIEW_SR_NO_TO_DELETE = "Enter review sr. No. to delete: ";
     public static final String LIST_OF_ALL_THE_REVIEWS = "List of all the reviews: ";
     public static final String ERROR_ADDING_REVIEW = "Error adding review: ";
     public static final String REVIEW_ADDED_SUCCESSFULLY = "Review added successfully.";
@@ -240,7 +252,9 @@ public class StringConstants {
 	public static final String DISPLAYING_ALL_EMPLOYEES_LIST = "Displaying all employees list";
 	public static final String DISPLAYING_ALL_CUSTOMERS_LIST = "Displaying all customers list";
 	public static final String DISPLAYING_ALL_USERS_LIST = "Displaying all users list";
-	public static final String ADD_A_VEHICLE = "Add a Vehicle";
-	public static final String REMOVE_A_VEHICLE = "Remove a vehicle";
+	public static final String ADD_A_VEHICLE = "Adding a Vehicle";
+	public static final String REMOVE_A_VEHICLE = "Removing a vehicle";
 	public static final String ERROR_UPDATING_COMPLAINT_STATUS = "Error updating complaint status ";
+	public static final String PLEASE_ENTER_VALID_INDEX = "Please enter valid index.";
+
 }

@@ -12,6 +12,7 @@ public class Choice {
 		    } else {
 		        System.out.println("Invalid choice. Please enter a valid integer.");
 		        App.scanner.next();
+		        System.out.print(StringConstants.ENTER_YOUR_CHOICE);
 		    }
 		}
 		return choice;

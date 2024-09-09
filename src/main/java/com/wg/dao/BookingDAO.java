@@ -93,8 +93,6 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 	
 	public void cancelBooking(String bookingId) throws SQLException {
 		String UPDATE_QUERY = "UPDATE BOOKING SET booking_status = ? WHERE booking_id = ?";
-		System.out.println(UPDATE_QUERY);
-		System.out.println(bookingId);
 		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)) {
 
 			stmt.setString(1, BookingStatus.CANCELED.name());
@@ -105,7 +103,7 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 	}
 	
 	public void returnVehicle(String bookingId, Timestamp returnTime) throws SQLException {
-        String UPDATE_QUERY = "UPDATE Booking SET return_time = ?, status = 'AVAILABLE' WHERE booking_id = ?";
+        String UPDATE_QUERY = "UPDATE Booking SET vehicle_return_time = ?, booking_status = 'COMPLETED' WHERE booking_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)) {
             stmt.setTimestamp(1, returnTime);
             stmt.setString(2, bookingId);

@@ -9,6 +9,7 @@ import com.wg.controller.ReviewController;
 import com.wg.dao.BookingDAO;
 import com.wg.dao.ComplaintDAO;
 import com.wg.dao.ReviewDAO;
+import com.wg.helper.Logout;
 import com.wg.helper.StringConstants;
 import com.wg.model.User;
 import com.wg.service.BookingService;
@@ -42,56 +43,31 @@ public class CustomerMenu {
 	        
 	        switch(choice) {
 	        case 1:
-	        	System.out.println(StringConstants.START_BOOKING_A_VEHICLE);
 	        	bookingController.makeBooking(App.scanner, user.getUserId());
 	        	break;
 	        case 2:
-	        	System.out.println(StringConstants.RETURNING_A_VEHICLE);
 	        	bookingController.returnVehicle(user.getUserId());
-	        	return;
+	        	break;
 	        case 3:
-	        	System.out.println(StringConstants.YOUR_BOOKING_HISTORY);
 	        	bookingController.viewHistory(user.getUserId());
 	        	break;
 	        case 4:
-	        	System.out.println(StringConstants.GIVE_A_REVIEW);
 	        	reviewController.addReview(user);
 	        	break;
 	        case 5:
-	        	System.out.println(StringConstants.SEE_ALL_REVIEWS);
 	        	reviewController.getReviewById(user.getUserId());
 	        	break;
 	        case 6:
-	        	System.out.println(StringConstants.RAISING_A_COMPLAINT);
 	        	complaintController.raiseComplaint(user);
 	        	break;
 	        case 7:
-	        	System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
 	        	complaintController.viewComplaintById(user.getUserId());
 	        	break;
 	        case 8:
-	        	System.out.println(StringConstants.CANCEL_BOOKING);
 	        	bookingController.cancelBooking(user.getUserId());
 	        	break;
 	        case 9:
-	        	System.out.println(StringConstants.LOGGING_OUT);
-	        	
-	        	while(true) {
-	        		System.out.print(StringConstants.DO_YOU_WANT_TO_CONTINUE);
-		        	
-			        String continueChoice = App.scanner.next();
-			        if(continueChoice.equalsIgnoreCase("y")) {
-			        	continue;
-			        }
-			        else if(continueChoice.equalsIgnoreCase("n")) {
-			        	System.out.println(StringConstants.THANK_YOU_FOR_VISITING);
-			        	System.exit(0);
-			        	break;
-			        }
-			        else {
-			        	System.out.println(StringConstants.PLEASE_ENTER_VALID_INPUT);
-			        }
-	        	}
+	        	Logout.logout();
 	        	break;
 	        default:
 	        	System.out.println(StringConstants.INVALID_CHOICE_PLEASE_ENTER_VALID_CHOICE);

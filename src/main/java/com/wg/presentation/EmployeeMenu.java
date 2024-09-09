@@ -7,6 +7,7 @@ import com.wg.controller.VehicleController;
 import com.wg.dao.ComplaintDAO;
 import com.wg.dao.UserDAO;
 import com.wg.dao.VehicleDAO;
+import com.wg.helper.Logout;
 import com.wg.helper.StringConstants;
 import com.wg.model.User;
 import com.wg.service.ComplaintService;
@@ -38,40 +39,22 @@ public class EmployeeMenu {
             
             switch(choice) {
 	        case 1:
-	        	System.out.println(StringConstants.DISPLAYING_CUSTOMERS_LIST);
 	        	userController.getAllCustomers();
 	        	break;
 	        case 2:
-	        	System.out.println(StringConstants.DISPLAYING_VEHICLES_LIST);
 	        	vehicleController.getAllVehicles();
 	        	break;
 	        case 3:
-	        	System.out.println(StringConstants.RAISING_A_COMPLAINT);
-	        	complaintController.raiseComplaint(user);
+	        	vehicleController.getAllMaintenanceVehicles();
 	        	break;
 	        case 4:
-	        	System.out.println(StringConstants.UPDATING_VEHICLE_STATUS);
-	        	vehicleController.changeVehicleStatus();
+	        	complaintController.raiseComplaint(user);
 	        	break;
 	        case 5:
-	        	System.out.println(StringConstants.LOGGING_OUT);
-	        	
-	        	while(true) {
-	        		System.out.print(StringConstants.DO_YOU_WANT_TO_CONTINUE);
-		        	
-			        String continueChoice = App.scanner.next();
-			        if(continueChoice.equalsIgnoreCase("y")) {
-			        	continue;
-			        }
-			        else if(continueChoice.equalsIgnoreCase("n")) {
-			        	System.out.println(StringConstants.THANK_YOU_FOR_VISITING);
-			        	System.exit(0);
-			        	break;
-			        }
-			        else {
-			        	System.out.println(StringConstants.INVALID_INPUT);
-			        }
-	        	}
+	        	vehicleController.changeVehicleStatus();
+	        	break;
+	        case 6:
+	        	Logout.logout();
 	        	break;
 	        default:
 	        	System.out.println(StringConstants.INVALID_CHOICE_PLEASE_ENTER_VALID_CHOICE);

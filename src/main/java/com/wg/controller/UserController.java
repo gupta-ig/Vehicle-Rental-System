@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import com.wg.app.App;
 import com.wg.helper.InputSanitizer;
 import com.wg.helper.InputValidator;
-import com.wg.helper.LoggingHelper;
+import com.wg.helper.LoggingUtil;
 import com.wg.helper.PasswordUtil;
 import com.wg.helper.StringConstants;
 import com.wg.helper.UserPrinter;
@@ -22,7 +22,7 @@ import com.wg.service.UserRegisterService;
  
 public class UserController {
  
-	private static final Logger logger = LoggingHelper.getLogger(UserController.class);
+	private static final Logger logger = LoggingUtil.getLogger(UserController.class);
     
     private final UserRegisterService userRegisterService;
  
@@ -36,8 +36,8 @@ public class UserController {
         if(userRegisterService == null) {
         	throw new IllegalArgumentException(StringConstants.USER_REGISTER_SERVICE_CANNOT_BE_NULL);
         }
-    	try {
-    		
+        try {
+        	System.out.println(StringConstants.REGISTER_AN_USER);
     		String firstName;
     		while(true) {
             	System.out.print(StringConstants.ENTER_FIRST_NAME);
@@ -114,15 +114,15 @@ public class UserController {
             
             Timestamp createdAt = Timestamp.valueOf(LocalDateTime.now());
  
-            //Role userRole = Role.CUSTOMER;
+//          Role userRole = Role.ADMIN;
  
-            String userRole = "";
+            String role = "";
             boolean validRole = false;
             while(!validRole) {
             	System.out.print(StringConstants.ENTER_ROLE);
-                userRole = scanner.next().toUpperCase();
+            	role = scanner.next().toUpperCase();
                 
-                if(userRole.equals("CUSTOMER") || userRole.equals("EMPLOYEE") || userRole.equals("MANAGER")) {
+                if(role.equals("CUSTOMER") || role.equals("EMPLOYEE") || role.equals("MANAGER")) {
                 	validRole = true;;
                 }
                 else {
@@ -130,7 +130,7 @@ public class UserController {
                 }
             }
  
-            Role role = Role.valueOf(userRole);
+            Role userRole = Role.valueOf(role);
 
             User newUser = new User();
             newUser.setUserId();
@@ -139,12 +139,14 @@ public class UserController {
             newUser.setPhoneNumber(phoneNumber);
             newUser.setUserEmail(userEmail);
             newUser.setGender(gender);
-            newUser.setRole(role);
+            newUser.setRole(userRole);
             newUser.setCreatedAt(createdAt);
             newUser.setPassword(userPassword);
             
             userRegisterService.registerUser(newUser);
             System.out.println(StringConstants.USER_REGISTERED_SUCCESSFULLY);
+            
+            logger.info(StringConstants.USER_REGISTERED_SUCCESSFULLY);
         } 
         catch (SQLException e) {
             System.err.println(StringConstants.ERROR_WHILE_REGISTERING_USER + e.getMessage());
@@ -157,22 +159,29 @@ public class UserController {
     //Delete User
     public void deleteUser(Scanner scanner) {
         try {
-        	
-        	System.out.println(StringConstants.LIST_OF_ALL_THE_USERS);
     		List<User> users = getAllUsers();
+    		if(users == null) {
+    			return;
+    		}
     		
-    		int choice;
-    		System.out.print(StringConstants.ENTER_USER_S_SR_NO_TO_DELETE);
-    		choice = App.scanner.nextInt();
+    		int index;
+    		while(true) {
+    			System.out.print(StringConstants.ENTER_USER_S_SR_NO_TO_DELETE);
+        		index = App.scanner.nextInt();
+        		if(index > 0 && index <= users.size()) {
+        			break;
+        		}
+        		else {
+        			System.out.println("Please enter valid index.");
+        		}
+    		}
         	
-            if(UserLoginService.getUserRole(users.get(choice - 1).getUserId()) == Role.ADMIN) {
+            if(UserLoginService.getUserRole(users.get(index - 1).getUserId()) == Role.ADMIN) {
             	System.out.println(StringConstants.ADMIN_CANNOT_BE_DELETED);
             	return;
             }
- 
-            userRegisterService.deleteUser(users.get(choice - 1).getUserEmail());
-            //logger.info(USER_DELETED_SUCCESSFULLY);
- 
+            userRegisterService.deleteUser(users.get(index - 1).getUserEmail());
+            System.out.println("User deleted successfully!");
         }
         catch (SQLException e) {
             System.err.println("Error while deleting user: " + e.getMessage());
@@ -186,9 +195,15 @@ public class UserController {
     public List<User> getAllUsers() {
     	try {
     		List<User> users = userRegisterService.getAllUsers();
-    		//logger.info("Retrieving all users");
-    		UserPrinter.printUsers(users);
-    		return users;
+    		if(users.size() <= 0) {
+    			System.out.println("No users found.");
+    			return null;
+    		}
+    		else {
+    			System.out.println(StringConstants.DISPLAYING_ALL_USERS_LIST);
+    			UserPrinter.printUsers(users);
+        		return users;
+    		}
     	}
     	catch (Exception e) {
     		System.out.println(StringConstants.ERROR_RETRIEVING_USERS + e.getMessage());
@@ -200,8 +215,13 @@ public class UserController {
 	public void getAllEmployees() {
 		try {
 			List<User> employees = userRegisterService.getAllEmployees(Role.EMPLOYEE);
-			//logger.info("Retrieving all employees");
-			UserPrinter.printUsers(employees);
+			if(employees.size() <= 0) {
+    			System.out.println("No employees found.");
+    		}
+			else {
+	        	System.out.println(StringConstants.DISPLAYING_ALL_EMPLOYEES_LIST);
+				UserPrinter.printUsers(employees);
+			}
 		}
 		catch (Exception e) {
 			System.out.println(StringConstants.ERROR_RETRIEVING_EMPLOYEES + e.getMessage());
@@ -213,8 +233,13 @@ public class UserController {
 	public void getAllManagers() {
 		try {
 			List<User> managers = userRegisterService.getAllManagers(Role.MANAGER);
-			//logger.info("Retrieving all managers");
-			UserPrinter.printUsers(managers);
+			if(managers.size() <= 0) {
+    			System.out.println("No managers found.");
+    		}
+			else {
+	        	System.out.println(StringConstants.DISPLAYING_ALL_MANAGERS_LIST);
+				UserPrinter.printUsers(managers);
+			}
 		}
 		catch (Exception e) {
 			System.out.println(StringConstants.ERROR_RETRIEVING_EMPLOYEES + e.getMessage());
@@ -226,8 +251,13 @@ public class UserController {
 	public void getAllCustomers() {
 		try {
 			List<User> customers = userRegisterService.getAllCustomers(Role.CUSTOMER);
-			//logger.info("Retrieving all customers");
-			UserPrinter.printUsers(customers);
+			if(customers.size() <= 0) {
+    			System.out.println("No customers found.");
+    		}
+			else {
+	        	System.out.println(StringConstants.DISPLAYING_ALL_CUSTOMERS_LIST);
+				UserPrinter.printUsers(customers);
+			}
 		}
 		catch (Exception e) {
 			System.out.println(StringConstants.ERROR_RETRIEVING_EMPLOYEES + e.getMessage());

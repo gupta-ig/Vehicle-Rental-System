@@ -1,0 +1,7 @@
+Sep 06, 2024 9:25:30 AM com.wg.controller.UserController registerUser
+INFO: User registered successfully!
+
+Sep 06, 2024 11:48:37 AM com.wg.controller.BookingController returnVehicle
+INFO: Vehicle returned successfully!
+Sep 06, 2024 11:49:05 AM com.wg.controller.BookingController returnVehicle
+INFO: Vehicle returned successfully!

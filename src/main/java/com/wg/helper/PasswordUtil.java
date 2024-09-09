@@ -1,8 +1,5 @@
 package com.wg.helper;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-
 import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordUtil {
@@ -15,18 +12,18 @@ public class PasswordUtil {
         return BCrypt.checkpw(password, hashedPassword);
     }
     
-    public static String getPasswordFromUser() {
-        JPasswordField passwordField = new JPasswordField(20);
-        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        if (option == JOptionPane.OK_OPTION) {
-            char[] passwordChars = passwordField.getPassword();
-            return new String(passwordChars);
-        } else {
-            return null; // User cancelled the operation
-        }
-    }
+//    public static String getPasswordFromUser() {
+//        JPasswordField passwordField = new JPasswordField(20);
+//        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter your password",
+//                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+//
+//        if (option == JOptionPane.OK_OPTION) {
+//            char[] passwordChars = passwordField.getPassword();
+//            return new String(passwordChars);
+//        } else {
+//            return null; // User cancelled the operation
+//        }
+//    }
     
     public static boolean isPasswordValid(String password) {
 		if(password == null || password.isEmpty()) {

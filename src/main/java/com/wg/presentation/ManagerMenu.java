@@ -6,6 +6,7 @@ import com.wg.controller.VehicleController;
 import com.wg.dao.ComplaintDAO;
 import com.wg.dao.VehicleDAO;
 import com.wg.helper.Choice;
+import com.wg.helper.Logout;
 import com.wg.helper.StringConstants;
 import com.wg.model.User;
 import com.wg.service.ComplaintService;
@@ -48,24 +49,7 @@ public class ManagerMenu {
 	        	complaintController.raiseComplaint(user);
 	        	break;
 	        case 5:
-	        	System.out.println(StringConstants.LOGGING_OUT);
-	        	
-	        	while(true) {
-	        		System.out.print(StringConstants.DO_YOU_WANT_TO_CONTINUE);
-		        	
-			        String continueChoice = App.scanner.next();
-			        if(continueChoice.equalsIgnoreCase("y")) {
-			        	continue;
-			        }
-			        else if(continueChoice.equalsIgnoreCase("n")) {
-			        	System.out.println(StringConstants.THANK_YOU_FOR_VISITING);
-			        	System.exit(0);
-			        	break;
-			        }
-			        else {
-			        	System.out.println(StringConstants.PLEASE_ENTER_VALID_INPUT);
-			        }
-	        	}
+	        	Logout.logout();
 	        	break;
 	        default:
 	        	System.out.println(StringConstants.INVALID_CHOICE_PLEASE_ENTER_VALID_CHOICE);

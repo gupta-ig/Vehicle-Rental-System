@@ -20,5 +20,7 @@ public class InputValidator {
         return userEmail != null && EMAIL_PATTERN.matcher(userEmail).matches();
     }
 
-    
+	public static boolean isRegistrationNumberValid(String regNo) {
+		return regNo != null && !regNo.isEmpty();
+	}
 }

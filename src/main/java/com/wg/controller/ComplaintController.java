@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.wg.app.App;
-import com.wg.helper.Choice;
 import com.wg.helper.ComplaintPrinter;
 import com.wg.helper.StringConstants;
 import com.wg.model.Complaint;
@@ -16,6 +15,7 @@ import com.wg.service.ComplaintService;
 
 public class ComplaintController {
 
+	public static final String PLEASE_ENTER_VALID_INDEX = "Please enter valid index.";
 	private ComplaintService complaintService;
 
 	public ComplaintController(ComplaintService complaintService) {
@@ -24,10 +24,22 @@ public class ComplaintController {
 	}
 
 	public void raiseComplaint(User user) {
+		System.out.println(StringConstants.RAISING_A_COMPLAINT);
+    	
 		try {
-			System.out.print(StringConstants.ENTER_THE_COMPLAINT_DESCRIPTION);
-			String description = App.scanner.nextLine();
-
+			String description;
+			while(true) {
+				System.out.print(StringConstants.ENTER_THE_COMPLAINT_DESCRIPTION);
+				description = App.scanner.nextLine();
+				
+				if(description.isBlank() || description.isEmpty()) {
+					System.out.println("Complaint cannot be blank or empty.");
+					continue;
+				}
+				else {
+					break;
+				}
+			}
 			Timestamp createdAt = Timestamp.valueOf(LocalDateTime.now());
 
 			Complaint newComplaint = new Complaint();
@@ -50,8 +62,16 @@ public class ComplaintController {
 	public List<Complaint> viewAllComplaints() {
 		try {
 			List<Complaint> complaints = complaintService.getAllComplaints();
-			ComplaintPrinter.printComplaints(complaints);
-			return complaints;
+			
+			if(complaints.isEmpty()) {
+				System.out.println("No complaints registered.");
+				return null;
+			}
+			else {
+				System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
+				ComplaintPrinter.printComplaints(complaints);
+				return complaints;
+			}
 		}
 		catch (SQLException e) {
 			System.out.println(StringConstants.ERROR_OCCURRED_WHILE_RETRIEVING_COMPLAINTS + e.getMessage());
@@ -60,6 +80,8 @@ public class ComplaintController {
 	}
 
 	public void viewComplaintById(String userId) {
+		System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
+    	
 		try {
 			List<Complaint> complaint = complaintService.getComplaintById(userId);
 			if (complaint != null && complaint.size() > 0) {
@@ -75,25 +97,33 @@ public class ComplaintController {
 
 	public void updateComplaintStatus() {
 		try {
-
-			System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
 			List<Complaint> complaints = viewAllComplaints();
-
+			
 			if(complaints == null) {
-				System.out.println(StringConstants.NO_COMPLAINTS_REGISTERED);
+				return;
 			}
-			int choice;
-			System.out.print(StringConstants.ENTER_VEHICLE_SR_NO_TO_CHANGE_STATUS);
+			System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
 
-			choice = Choice.enterChoice();
+			int index;
+			while(true) {
+				System.out.print(StringConstants.ENTER_VEHICLE_SR_NO_TO_CHANGE_STATUS);
+				index = App.scanner.nextInt();
+				
+				if(index < 0 || index >= complaints.size()) {
+					System.out.println(PLEASE_ENTER_VALID_INDEX);
+				}
+				else {
+					break;
+				}
+			}
 
 			ComplaintStatus status = null;
 			while(true) {
 				System.out.print(StringConstants.ENTER_THE_COMPLAINT_STATUS_YOU_WANT_TO_CHANGE_YOUR_COMPLAINT);
-				String input = App.scanner.next().toUpperCase();
+				String input = App.scanner.next().toUpperCase().trim();
 				status = ComplaintStatus.valueOf(input);
 
-				if(status == ComplaintStatus.UNDER_PROCESS || status == ComplaintStatus.RESOLVED || status == ComplaintStatus.DECLINED) {
+				if(status.equals(ComplaintStatus.UNDER_PROCESS) || status.equals(ComplaintStatus.RESOLVED) || status.equals(ComplaintStatus.DECLINED)) {
 					break;
 				}
 				else {
@@ -101,9 +131,12 @@ public class ComplaintController {
 				}
 			}
 
-			complaintService.changeComplaintStatus(complaints.get(choice - 1).getComplaintId(), status);
+			complaintService.changeComplaintStatus(complaints.get(index - 1).getComplaintId(), status);
+			
 			System.out.println(StringConstants.COMPLAINT_STATUS_CHANGED_SUCCESSFULLY);
-		} catch (SQLException e) {
+			
+		} 
+		catch (SQLException e) {
 			System.err.println(StringConstants.ERROR_UPDATING_COMPLAINT_STATUS + e.getMessage());
 		}
 		catch (IllegalArgumentException e) {

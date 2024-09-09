@@ -8,7 +8,6 @@ import com.wg.controller.UserController;
 import com.wg.dao.UserDAO;
 import com.wg.helper.Choice;
 import com.wg.helper.InputSanitizer;
-import com.wg.helper.PasswordUtil;
 import com.wg.helper.StringConstants;
 import com.wg.model.User;
 import com.wg.service.UserRegisterService;
@@ -18,7 +17,7 @@ public class MenuRunner {
 	private static UserRegisterService userRegisterService = new UserRegisterService(userDAO);
 	
 	public static void displayStarterMenu() throws SQLException {
-		while (true) {
+		while (true) {	
 			System.out.println(StringConstants.STARTER_MENU);
 			System.out.print(StringConstants.ENTER_YOUR_CHOICE);
 
@@ -47,11 +46,11 @@ public class MenuRunner {
 		System.out.print(StringConstants.ENTER_USER_EMAIL);
 		String userEmail = InputSanitizer.sanitizeEmail(App.scanner.next());
 
-		String userPassword = PasswordUtil.getPasswordFromUser();
+		//String userPassword = PasswordUtil.getPasswordFromUser();
 		 
 		
-//		System.out.print("Enter Password: ");
-//		String userPassword = InputSanitizer.sanitizePassword(App.scanner.next());
+		System.out.print("Enter Password: ");
+		String userPassword = InputSanitizer.sanitizePassword(App.scanner.next());
 
 		LoginController.authenticateUser(userEmail, userPassword);
 	}
