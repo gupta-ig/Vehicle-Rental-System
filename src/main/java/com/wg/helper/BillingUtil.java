@@ -10,7 +10,7 @@ public class BillingUtil {
 	private static final BigDecimal HOURLY_RATE = new BigDecimal("200.00");
     private static final BigDecimal FINE_RATE = new BigDecimal("20.00");         // Set your fine per hour
 	
-	public static BigDecimal calculateTotalAmount(Timestamp startTime, Timestamp endTime) {
+	public BigDecimal calculateTotalAmount(Timestamp startTime, Timestamp endTime) {
 //        BigDecimal hourlyRate;
 
 //        // Determine the hourly rate based on vehicle type
@@ -33,7 +33,7 @@ public class BillingUtil {
         return totalAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
-	public static BigDecimal calculateFineAmount(Timestamp bookingEndTime, Timestamp vehicleReturnTime) {
+	public BigDecimal calculateFineAmount(Timestamp bookingEndTime, Timestamp vehicleReturnTime) {
 		
 		// Check if the vehicle was returned late
         if (vehicleReturnTime.after(bookingEndTime)) {

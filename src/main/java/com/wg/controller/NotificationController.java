@@ -1,6 +1,7 @@
 package com.wg.controller;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.wg.helper.StringConstants;
@@ -17,7 +18,13 @@ public class NotificationController {
 	
 	public void sendNotification(String userId, String message) throws SQLException {
 		try {
-            notifService.sendNotification(userId, message);
+			Notification notification = new Notification();
+	        notification.setUserId(userId);
+	        notification.setNotificationId();
+	        notification.setNotificationMessage(message);
+	        notification.setNotificationDate(new Timestamp(System.currentTimeMillis()));
+	        
+            notifService.sendNotification(notification);
             System.out.println(message);
 //            System.out.println(StringConstants.NOTIFICATION_SENT_SUCCESSFULLY);
         } 
@@ -28,7 +35,7 @@ public class NotificationController {
 	
 	public void viewNotifications(String userId) throws SQLException {
 		try {
-            List<Notification> notifications = notifService.getNotificationsForUser(userId);
+            List<Notification> notifications = notifService.getNotificationsByUser(userId);
             notifications.forEach(notification -> System.out.println(notification.getNotificationMessage()));
         } 
 		catch (SQLException e) {

@@ -8,9 +8,14 @@ import com.wg.service.UserLoginService;
  
 public class LoginController {
  
-    private static final UserLoginService userLoginService = new UserLoginService();
- 
-    public static void authenticateUser(String userEmail, String password) {
+    private static UserLoginService userLoginService;
+    
+    public LoginController(UserLoginService userLoginService) {
+		super();
+		this.userLoginService = userLoginService;
+	}
+
+	public static void authenticateUser(String userEmail, String password) {
         if (userEmail == null || userEmail.isEmpty() || password == null || password.isEmpty()) {
             System.out.println("Credentials can't be empty");
             return;

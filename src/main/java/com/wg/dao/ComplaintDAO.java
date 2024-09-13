@@ -35,7 +35,7 @@ public class ComplaintDAO extends GenericDAO<Complaint, String>{
 
 	@Override
 	protected String getPrimaryKeyColumn() {
-		return "user_id";
+		return "complaint_id";
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ComplaintDAO extends GenericDAO<Complaint, String>{
 		String UPDATE_QUERY = "UPDATE " + getTableName() + " SET complaint_status = ? WHERE " + getPrimaryKeyColumn() + " = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)){
 			stmt.setString(1, status.name());
-			setPreparedStatementForPrimaryKey(stmt, complaintId);
+			stmt.setString(2, complaintId);
 			stmt.executeUpdate();
 		}
 	}

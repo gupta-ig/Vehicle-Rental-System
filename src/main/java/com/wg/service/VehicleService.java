@@ -9,12 +9,12 @@ import com.wg.model.Vehicle;
 import com.wg.model.enums.AvailabilityStatus;
 
 public class VehicleService {
-	private final VehicleDAO vehicleDAO;
+	private VehicleDAO vehicleDAO;
 
 	public VehicleService(VehicleDAO vehicleDAO) {
 		this.vehicleDAO = vehicleDAO;
 	}
-	
+	 
 	// Register new Vehicle
 	public void registerVehicle(Vehicle vehicle) throws SQLException {
         List<Vehicle> existingVehicle = vehicleDAO.getById(vehicle.getVehicleId());
@@ -22,7 +22,7 @@ public class VehicleService {
             throw new IllegalArgumentException("Vehicle already exists.");
         }
         vehicleDAO.add(vehicle);
-    }
+    } 
 	
 	// Get Vehicle By Id
     public List<Vehicle> getVehicleById(String vehicleId) throws SQLException {

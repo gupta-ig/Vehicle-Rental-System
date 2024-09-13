@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.wg.dao.ComplaintDAO;
+import com.wg.helper.StringConstants;
 import com.wg.model.Complaint;
 import com.wg.model.enums.ComplaintStatus;
 
@@ -31,11 +32,14 @@ public class ComplaintService {
 	public void changeComplaintStatus(String complaintId, ComplaintStatus status) throws SQLException {
 		List<Complaint> complaint = complaintDAO.getById(complaintId);
 		if(complaint.get(0).getComplaintStatus().equals(status)) {
-			System.out.println("The complaint already have same status.");
+			System.out.println(StringConstants.THE_COMPLAINT_ALREADY_HAVE_SAME_STATUS);
 		}
 		else {
 			complaintDAO.updateStatusQuery(complaintId, status);
-		}
-		
+		}	
 	}
+	
+	public void deleteComplaint(String complaintId) throws SQLException {
+        complaintDAO.delete(complaintId);
+    }
 }

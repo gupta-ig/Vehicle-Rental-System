@@ -1,6 +1,5 @@
 package com.wg.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,23 +7,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wg.config.DatabaseConfig;
 import com.wg.model.Booking;
 import com.wg.model.enums.BookingStatus;
 
 public class BookingDAO extends GenericDAO<Booking, String>{
 
-	Connection connection;
-	
-	public BookingDAO () {
-		try {
-			connection = DatabaseConfig.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	protected String getTableName() {
 		return "BOOKING";
@@ -72,9 +59,8 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 	}
 
 	public List<Booking> getBookingsForVehicleWithinTimeRange(String vehicleId, Timestamp startTime, Timestamp endTime) throws SQLException {
-        String query = "SELECT * FROM booking WHERE vehicle_id = ? AND NOT (booking_end_time <= ? OR booking_start_time >= ?)";
-        
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        String SELECT_QUERY = "SELECT * FROM booking WHERE vehicle_id = ? AND NOT (booking_end_time <= ? OR booking_start_time >= ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY)) {
             preparedStatement.setString(1, vehicleId);
             preparedStatement.setTimestamp(2, startTime);
             preparedStatement.setTimestamp(3, endTime);
@@ -84,7 +70,6 @@ public class BookingDAO extends GenericDAO<Booking, String>{
             
             while (resultSet.next()) {
                 Booking booking = mapResultSetToEntity(resultSet);
-                
                 bookings.add(booking);
             }
             return bookings;
@@ -94,10 +79,8 @@ public class BookingDAO extends GenericDAO<Booking, String>{
 	public void cancelBooking(String bookingId) throws SQLException {
 		String UPDATE_QUERY = "UPDATE BOOKING SET booking_status = ? WHERE booking_id = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)) {
-
 			stmt.setString(1, BookingStatus.CANCELED.name());
 			stmt.setString(2, bookingId);
-
 			stmt.executeUpdate();
 		}
 	}

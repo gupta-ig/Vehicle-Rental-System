@@ -256,5 +256,6 @@ public class StringConstants {
 	public static final String REMOVE_A_VEHICLE = "Removing a vehicle";
 	public static final String ERROR_UPDATING_COMPLAINT_STATUS = "Error updating complaint status ";
 	public static final String PLEASE_ENTER_VALID_INDEX = "Please enter valid index.";
-
+	public static final String THE_COMPLAINT_ALREADY_HAVE_SAME_STATUS = "The complaint already have same status.";
+	
 }

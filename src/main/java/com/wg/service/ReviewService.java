@@ -18,7 +18,6 @@ public class ReviewService {
         reviewDAO.add(review);
     }
 
-
     public void deleteReview(String reviewId) throws SQLException {
         reviewDAO.delete(reviewId);
     }

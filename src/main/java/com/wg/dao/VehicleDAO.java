@@ -20,7 +20,7 @@ public class VehicleDAO extends GenericDAO<Vehicle, String> {
 	public VehicleDAO () {
 		try {
 			connection = DatabaseConfig.getConnection();
-		} catch (SQLException e) {
+		} catch (SQLException e) { 
 			e.printStackTrace();
 		}
 	}
@@ -87,11 +87,13 @@ public class VehicleDAO extends GenericDAO<Vehicle, String> {
 	}
 
 	public void updateStatusQuery(String vehicleId, AvailabilityStatus status) throws SQLException {
-		String UPDATE_QUERY = "UPDATE " + getTableName() + " SET availability_status = \"BOOKED\" WHERE " + getPrimaryKeyColumn() + " = ?";
+		String UPDATE_QUERY = "UPDATE " + getTableName() + " SET availability_status = ? WHERE " + getPrimaryKeyColumn() + " = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(UPDATE_QUERY)){
-			setPreparedStatementForPrimaryKey(stmt, vehicleId);
+			stmt.setString(1, status.name());
+			stmt.setString(2, vehicleId);
+			System.out.println(stmt);
 			stmt.executeUpdate();
-		}	
+		}	 
 	}
 
 //	public List<Vehicle> getAllAvailableVehicles(AvailabilityStatus status) throws SQLException {

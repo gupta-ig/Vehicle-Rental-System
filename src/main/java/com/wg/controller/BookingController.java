@@ -19,7 +19,6 @@ import com.wg.helper.VehiclePrinter;
 import com.wg.model.Booking;
 import com.wg.model.Vehicle;
 import com.wg.model.enums.BookingStatus;
-import com.wg.model.enums.PaymentMethod;
 import com.wg.service.BookingService;
 import com.wg.service.NotificationService;
 import com.wg.service.PaymentService;
@@ -27,7 +26,7 @@ import com.wg.service.VehicleService;
 
 public class BookingController {
 	
-	BookingService bookingService;
+	private BookingService bookingService;
 
 	public BookingController(BookingService bookingService) {
 		super();
@@ -115,6 +114,7 @@ public class BookingController {
                 booking.setVehicleId(availableVehicles.get(index - 1).getVehicleId());
                 booking.setBookingStartTime(startTime);
                 booking.setBookingEndTime(endTime);
+                booking.setVehicleReturnTime(endTime);
                 booking.setBookingStatus(BookingStatus.BOOKED);
                 booking.setCreatedAt(createdAt);
                 
@@ -123,7 +123,7 @@ public class BookingController {
                     bookingService.bookVehicle(booking);
                     
                     notificationController.sendNotification(userId, StringConstants.VEHICLE_BOOKED_SUCCESSFULLY);
-                    paymentController.handlePayment(booking);
+                    paymentController.handlePayment(booking, endTime);
 
                     logger.info(StringConstants.VEHICLE_BOOKED_SUCCESSFULLY);
 				            
@@ -210,8 +210,7 @@ public class BookingController {
     		bookingService.returnVehicle(bookings.get(index - 1).getBookingId(), returnTime);
     		
     		if(returnTime.after(new Timestamp(System.currentTimeMillis()))) {
-    			PaymentMethod paymentMethod = paymentController.inputPaymentMethod();
-    			paymentService.processFinePayment(bookings.get(index - 1).getBookingId(), bookings.get(index - 1).getBookingEndTime(), paymentMethod, returnTime);
+    			paymentController.handlePayment(bookings.get(index - 1), returnTime);
     		}
 
     		notificationController.sendNotification(userId, StringConstants.VEHICLE_RETURNED_SUCCESSFULLY);
@@ -223,8 +222,5 @@ public class BookingController {
         catch (IllegalArgumentException e) {
             System.err.println(StringConstants.INVALID_INPUT + e.getMessage());
         }
-		
-        
-    }
-	
+    }	
 }

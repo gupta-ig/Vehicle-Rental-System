@@ -8,7 +8,7 @@ import com.wg.model.User;
 import com.wg.model.enums.Role;
  
 public class UserRegisterService {
-    private final UserDAO userDAO;
+    private UserDAO userDAO;
  
     public UserRegisterService(UserDAO userDAO) {
 		this.userDAO = userDAO;

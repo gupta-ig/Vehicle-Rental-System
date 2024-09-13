@@ -105,17 +105,29 @@ public class ComplaintController {
 			System.out.println(StringConstants.VIEW_ALL_COMPLAINTS);
 
 			int index;
-			while(true) {
-				System.out.print(StringConstants.ENTER_VEHICLE_SR_NO_TO_CHANGE_STATUS);
-				index = App.scanner.nextInt();
-				
-				if(index < 0 || index >= complaints.size()) {
-					System.out.println(PLEASE_ENTER_VALID_INDEX);
-				}
-				else {
-					break;
-				}
-			}
+    		while(true) {
+    			System.out.print(StringConstants.ENTER_VEHICLE_SR_NO_TO_CHANGE_STATUS);
+    			 if (App.scanner.hasNextInt()) {
+    				 index = App.scanner.nextInt();
+    				 System.out.println(index);
+    				 if(index > 0 && index <= complaints.size())
+    				 {
+    					 break;
+    				 }
+    			 }
+    			 else {
+    				 System.out.println("Invalid choice. Please enter a valid integer.");
+    			     App.scanner.next();
+    			     System.out.print(StringConstants.ENTER_YOUR_CHOICE);
+    			    }
+//    			index = App.scanner.nextInt();
+//        		if(index > 0 && index <= complaints.size()) {
+//        			break;
+//        		}
+//        		else {
+//        			System.out.println("Please enter valid index.");
+//        		}
+    		}
 
 			ComplaintStatus status = null;
 			while(true) {
@@ -130,8 +142,8 @@ public class ComplaintController {
 					System.out.println(StringConstants.PLEASE_ENTER_A_VALID_STATUS);
 				}
 			}
-
 			complaintService.changeComplaintStatus(complaints.get(index - 1).getComplaintId(), status);
+			System.out.println("cvgbhjkl");
 			
 			System.out.println(StringConstants.COMPLAINT_STATUS_CHANGED_SUCCESSFULLY);
 			

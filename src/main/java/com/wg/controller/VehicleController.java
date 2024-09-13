@@ -21,7 +21,8 @@ import com.wg.model.enums.VehicleType;
 import com.wg.service.VehicleService;
 
 public class VehicleController {
-	private final VehicleService vehicleService;
+	
+	private VehicleService vehicleService;
 
 	public VehicleController(VehicleService vehicleService) {
 		super();

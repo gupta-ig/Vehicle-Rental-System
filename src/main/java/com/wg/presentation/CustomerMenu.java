@@ -9,6 +9,7 @@ import com.wg.controller.ReviewController;
 import com.wg.dao.BookingDAO;
 import com.wg.dao.ComplaintDAO;
 import com.wg.dao.ReviewDAO;
+import com.wg.dao.VehicleDAO;
 import com.wg.helper.Logout;
 import com.wg.helper.StringConstants;
 import com.wg.model.User;
@@ -23,7 +24,8 @@ public class CustomerMenu {
 		int choice;
 		
 		BookingDAO bookingDAO = new BookingDAO();
-		BookingService bookingService = new BookingService(bookingDAO);
+		VehicleDAO vehicleDAO = new VehicleDAO();
+		BookingService bookingService = new BookingService(bookingDAO, vehicleDAO); 
 		BookingController bookingController = new BookingController(bookingService);
 		
 		ReviewDAO reviewDAO = new ReviewDAO();

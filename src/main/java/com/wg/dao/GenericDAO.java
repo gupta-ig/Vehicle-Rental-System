@@ -52,7 +52,7 @@ public abstract class GenericDAO<T, ID> {
     	}
     	return entities;
     }
-    
+     
     // Get All
     public List<T> getAll() throws SQLException {
     	String SELECT_QUERY = "SELECT * FROM " + getTableName();

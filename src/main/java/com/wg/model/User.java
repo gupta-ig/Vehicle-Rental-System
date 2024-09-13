@@ -94,8 +94,6 @@ public class User {
 				+ phoneNumber + ", userEmail=" + userEmail + ", gender=" + gender + ", createdAt=" + createdAt
 				+ ", password=" + password + "]";
 	}
-
-	
 	
 	
 	

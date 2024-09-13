@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 import com.wg.app.App;
+import com.wg.dao.UserDAO;
 import com.wg.helper.InputSanitizer;
 import com.wg.helper.InputValidator;
 import com.wg.helper.LoggingUtil;
@@ -30,6 +31,8 @@ public class UserController {
         this.userRegisterService = userRegisterService;
     }
     
+    UserDAO userDAO = new UserDAO();
+    UserLoginService userLoginService = new UserLoginService(userDAO);
     
     // Register a new User
     public static void registerUser(Scanner scanner, UserRegisterService userRegisterService) {
@@ -176,7 +179,8 @@ public class UserController {
         		}
     		}
         	
-            if(UserLoginService.getUserRole(users.get(index - 1).getUserId()) == Role.ADMIN) {
+            
+			if(userLoginService.getUserRole(users.get(index - 1).getUserId()) == Role.ADMIN) {
             	System.out.println(StringConstants.ADMIN_CANNOT_BE_DELETED);
             	return;
             }

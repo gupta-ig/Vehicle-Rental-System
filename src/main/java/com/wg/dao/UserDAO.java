@@ -1,21 +1,16 @@
 package com.wg.dao;
- 
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wg.config.DatabaseConfig;
 import com.wg.model.User;
 import com.wg.model.enums.Gender;
 import com.wg.model.enums.Role;
  
 public class UserDAO extends GenericDAO<User, String> {
-	public UserDAO() {
-		super();
-	}
 
 	@Override
     protected String getTableName() {
@@ -68,8 +63,7 @@ public class UserDAO extends GenericDAO<User, String> {
  
     public Role getUserRoleByUserId(String userId) {
     	String SELECT_QUERY = "SELECT user_role FROM " + getTableName() + " WHERE user_id = ?";
-        try (Connection connection = DatabaseConfig.getConnection();
-        		PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
             stmt.setString(1, userId);
             try (ResultSet result = stmt.executeQuery()) {
             	if(result.next()) {
@@ -86,8 +80,7 @@ public class UserDAO extends GenericDAO<User, String> {
 	public List<User> getAllEmployees(Role role) throws SQLException {
 		String SELECT_QUERY = "SELECT * FROM " + getTableName() + " WHERE user_role = ?";
 		List<User> employees = new ArrayList<>();
-		try(Connection connection = DatabaseConfig.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
+		try(PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
 			stmt.setString(1, role.name());
 			try(ResultSet result = stmt.executeQuery()) {
 				while(result.next()) {
@@ -101,8 +94,7 @@ public class UserDAO extends GenericDAO<User, String> {
 	public List<User> getAllManagers(Role role) throws SQLException {
 		String SELECT_QUERY = "SELECT * FROM " + getTableName() + " WHERE user_role = ?";
 		List<User> managers = new ArrayList<>();
-		try(Connection connection = DatabaseConfig.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
+		try(PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
 			stmt.setString(1, role.name());
 			try(ResultSet result = stmt.executeQuery()) {
 				while(result.next()) {
@@ -116,8 +108,7 @@ public class UserDAO extends GenericDAO<User, String> {
 	public List<User> getAllCustomers(Role role) throws SQLException {
 		String SELECT_QUERY = "SELECT * FROM " + getTableName() + " WHERE user_role = ?";
 		List<User> customers = new ArrayList<>();
-		try(Connection connection = DatabaseConfig.getConnection();
-				PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
+		try(PreparedStatement stmt = connection.prepareStatement(SELECT_QUERY)) {
 			stmt.setString(1, role.name());
 			try(ResultSet result = stmt.executeQuery()) {
 				while(result.next()) {

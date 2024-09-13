@@ -2,6 +2,7 @@ package com.wg.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class Maintenance {
 	private String maintenanceId;
@@ -14,7 +15,7 @@ public class Maintenance {
 	public Maintenance(String maintenanceId, String vehicleId, Timestamp startDate, Timestamp endDate,
 			String description, BigDecimal totalBill) {
 		super();
-		this.maintenanceId = maintenanceId;
+		this.maintenanceId = (maintenanceId == null) ? UUID.randomUUID().toString() : maintenanceId;
 		this.vehicleId = vehicleId;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -26,8 +27,8 @@ public class Maintenance {
 		return maintenanceId;
 	}
 
-	public void setMaintenanceId(String maintenanceId) {
-		this.maintenanceId = maintenanceId;
+	public void setMaintenanceId() {
+		this.maintenanceId = UUID.randomUUID().toString();
 	}
 
 	public String getVehicleId() {

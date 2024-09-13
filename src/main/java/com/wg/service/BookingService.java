@@ -2,7 +2,6 @@ package com.wg.service;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.wg.dao.BookingDAO;
@@ -12,12 +11,13 @@ import com.wg.model.enums.AvailabilityStatus;
 public class BookingService {
 	
 	BookingDAO bookingDAO;
+	VehicleDAO vehicleDAO;
 	
-	public BookingService(BookingDAO bookingDAO) {
+	public BookingService(BookingDAO bookingDAO, VehicleDAO vehicleDAO) {
 		this.bookingDAO = bookingDAO;
-	}
+		this.vehicleDAO = vehicleDAO;
+	} 
 	
-	VehicleDAO vehicleDAO = new VehicleDAO();
 	
 	public void bookVehicle(Booking booking) throws SQLException {
 		List<Booking> existingBooking = bookingDAO.getById(booking.getBookingId());
@@ -25,8 +25,8 @@ public class BookingService {
 			throw new IllegalArgumentException("Booking already exist.");
 		}
         bookingDAO.add(booking);
-    }
-
+    } 
+	
 	public List<Booking> getAllBookings(String userId) throws SQLException {
 		return bookingDAO.getById(userId);
 	}
